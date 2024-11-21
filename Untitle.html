@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planificateur de Voyage</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #e8f0fe;
+            color: #333;
+            margin: 20px;
+        }
+        .confirmation {
+            display: none;
+            background-color: #dff0d8;
+            color: #3c763d;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .error {
+            color: red;
+            margin-top: -15px;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Planificateur de Voyage</h1>
+
+        <!-- Formulaire de connexion -->
+        <div id="loginSection" class="mb-4">
+            <h3>Connexion</h3>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Nom d'utilisateur :</label>
+                    <input type="text" class="form-control" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" class="form-control" id="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Se connecter</button>
+            </form>
+        </div>
+
+        <!-- Formulaire de voyage -->
+        <form id="voyageForm">
+            <div class="form-group">
+                <label for="destination">Destination :</label>
+                <input type="text" class="form-control" id="destination" name="destination" required>
+            </div>
+
+            <div class="form-group">
+                <label for="date-depart">Date de départ :</label>
+                <input type="date" class="form-control" id="date-depart" name="date-depart" required>
+            </div>
+
+            <div class="form-group">
+                <label for="date-retour">Date de retour :</label>
+                <input type="date" class="form-control" id="date-retour" name="date-retour" required>
+            </div>
+
+            <div class="form-group">
+                <label for="nombre-passagers">Nombre de passagers :</label>
+                <select class="form-control" id="nombre-passagers" name="nombre-passagers" required>
+                    <option value="" disabled selected>Choisissez...</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5+</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="type-hebergement">Type d'hébergement :</label>
+                <select class="form-control" id="type-hebergement" name="type-hebergement" required>
+                    <option value="" disabled selected>Choisissez...</option>
+                    <option value="hotel">Hôtel</option>
+                    <option value="auberge">Auberge</option>
+                    <option value="appartement">Appartement</option>
+                    <option value="camping">Camping</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="activites">Activités souhaitées :</label>
+                <input type="text" class="form-control" id="activites" name="activites" placeholder="Exemples : visites, randonnées, etc.">
+            </div>
+
+            <button type="submit" class="btn btn-success">Planifier le Voyage</button>
+        </form>
+
+        <div class="confirmation" id="confirmationMessage">
+            Merci d'avoir planifié votre voyage !<br>
+            Vérifiez votre email pour plus de détails.
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Logique de connexion ici (ex : vérifier utilisateur dans un backend)
+            alert('Connexion réussie !');
+        });
+
+        document.getElementById('voyageForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Empêche l'envoi du formulaire
+
+            // Récupération des valeurs
+            const destination = document.getElementById('destination').value;
+            const dateDepart = document.getElementById('date-depart').value;
+            const dateRetour = document.getElementById('date-retour').value;
+            const nombrePassagers = document.getElementById('nombre-passagers').value;
+            const typeHebergement = document.getElementById('type-hebergement').value;
+            const activites = document.getElementById('activites').value;
+
+            // Validation des dates
+            const departDate = new Date(dateDepart);
+            const retourDate = new Date(dateRetour);
+            if (retourDate <= departDate) {
+                alert('La date de retour doit être après la date de départ.');
+                return;
+            }
+
+            // Calcul du coût estimé (exemple simple)
+            const baseCostPerPerson = 100; // Coût de base par personne
+            const typeCost = {
+                'hotel': 50,
+                'auberge': 30,
+                'appartement': 40,
+                'camping': 20
+            };
+
+            const totalCost = (baseCostPerPerson + typeCost[typeHebergement]) * nombrePassagers;
+
+            // Afficher le message de confirmation avec le coût estimé
+            const confirmationMessage = document.getElementById('confirmationMessage');
+            confirmationMessage.innerHTML = `
+                Merci d'avoir planifié votre voyage à ${destination} !<br>
+                Coût estimé : ${totalCost}€<br>
+                Vérifiez votre email pour plus de détails.
+            `;
+            confirmationMessage.style.display = 'block';
+
+            // Optionnel: Réinitialiser le formulaire après soumission
+            document.getElementById('voyageForm').reset();
+        });
+    </script>
+</body>
+</html>
+
+
+
